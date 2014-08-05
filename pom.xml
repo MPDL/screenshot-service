@@ -1,24 +1,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>de.mpg.mpdl</groupId>
-  <packaging>war</packaging>
-  <version>0.1-SNAPSHOT</version>
-  <name>html-screenshot-service</name>
-  <url>http://api.mpdl.mpg.de/html-screenshot</url>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <finalName>my-webapp</finalName>
-  </build>
-  <artifactId>html-screenshot-service</artifactId>
-  <scm>
-  	<url>https://github.com/MPDL/html-screenshot-service</url>
-  </scm>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.mpg.mpdl</groupId>
+	<packaging>war</packaging>
+	<version>0.1-SNAPSHOT</version>
+	<name>html-screenshot-service</name>
+	<url>http://api.mpdl.mpg.de/html-screenshot</url>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- <dependency> <groupId>org.seleniumhq.selenium</groupId> <artifactId>selenium-java</artifactId> 
+			<version>2.42.2</version> </dependency> -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-firefox-driver</artifactId>
+			<version>2.42.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+			<version>3.0.1</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>html-screenshot</finalName>
+	</build>
+	<artifactId>html-screenshot-service</artifactId>
+	<scm>
+		<url>https://github.com/MPDL/html-screenshot-service</url>
+	</scm>
 </project>
