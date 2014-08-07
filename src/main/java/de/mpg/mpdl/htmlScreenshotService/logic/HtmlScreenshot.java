@@ -62,9 +62,8 @@ public class HtmlScreenshot {
 	 * @return
 	 */
 
-	public File takeScreenshot(URL url) {
-		driver.get(url.toString());
-
+	public File takeScreenshot(String url) {
+		driver.get(url);
 		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 	}
 

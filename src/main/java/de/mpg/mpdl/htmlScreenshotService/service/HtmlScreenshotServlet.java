@@ -126,8 +126,9 @@ public class HtmlScreenshotServlet extends HttpServlet {
 		try {
 			File html = File.createTempFile("htmlTemp", ".html");
 			IOUtils.copy(req.getInputStream(), new FileOutputStream(html));
-			file = screenshotService.takeScreenshot("file:///"
-					+ html.getAbsolutePath());
+			String path = "file:///" + html.getAbsolutePath();
+			System.out.println(path);
+			file = screenshotService.takeScreenshot(path);
 			IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

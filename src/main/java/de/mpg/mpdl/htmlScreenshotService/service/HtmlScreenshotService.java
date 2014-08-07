@@ -55,7 +55,7 @@ public class HtmlScreenshotService
     
     public File takeScreenshot(String url) throws MalformedURLException
     {
-        return htmlScreenshot.takeScreenshot(URI.create(url).toURL());
+        return htmlScreenshot.takeScreenshot(url);
     }
     
     public File takeScreenshot(String url, int width, int height) throws MalformedURLException
