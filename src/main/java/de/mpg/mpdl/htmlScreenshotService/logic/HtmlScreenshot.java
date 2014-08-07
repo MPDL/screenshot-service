@@ -31,6 +31,7 @@ package de.mpg.mpdl.htmlScreenshotService.logic;
 import java.io.File;
 import java.net.URL;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -43,27 +44,44 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class HtmlScreenshot
-{
-    private WebDriver driver;
+public class HtmlScreenshot {
+	private WebDriver driver;
 
-    /**
-     * Initialize the {@link HtmlScreenshot} with Firefox
-     */
-    public HtmlScreenshot()
-    {
-        driver = new FirefoxDriver();
-    }
+	/**
+	 * Initialize the {@link HtmlScreenshot} with Firefox
+	 */
+	public HtmlScreenshot() {
+		driver = new FirefoxDriver();
 
-    /**
-     * Return a screenshot of the html page at the passed {@link URL}
-     * 
-     * @param url
-     * @return
-     */
-    public File takeScreenshot(URL url)
-    {
-        driver.get(url.toString());
-        return ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-    }
+	}
+
+	/**
+	 * Return a screenshot of the html page at the passed {@link URL}
+	 * 
+	 * @param url
+	 * @return
+	 */
+
+	public File takeScreenshot(URL url) {
+		driver.get(url.toString());
+
+		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	}
+
+	public File takeScreenshot(URL url, int width, int height) {
+		driver.get(url.toString());
+		driver.manage().window().setSize(new Dimension(width, height));
+
+		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	}
+
+	public File takeScreenshot(URL url, Boolean fullSize) {
+		driver.get(url.toString());
+
+		if (fullSize == true) {
+			driver.manage().window().maximize();
+		}
+
+		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	}
 }

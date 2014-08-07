@@ -30,6 +30,7 @@ package de.mpg.mpdl.htmlScreenshotService.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -46,39 +47,91 @@ import org.apache.commons.io.IOUtils;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class HtmlScreenshotServlet extends HttpServlet
-{
-    private static final long serialVersionUID = -3073642728935619196L;
-    private HtmlScreenshotService screenshotService;
+public class HtmlScreenshotServlet extends HttpServlet {
+	private static final long serialVersionUID = -3073642728935619196L;
+	private HtmlScreenshotService screenshotService;
 
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.GenericServlet#init()
-     */
-    @Override
-    public void init() throws ServletException
-    {
-        super.init();
-        screenshotService = new HtmlScreenshotService();
-    }
+	private File file;
+	// private File resizeImageFile;
+	private int browserWidth;
+	private int browserHeight;
 
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,
-     * javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-    {
-        try
-        {
-            String url = req.getParameter("url");
-            File file = screenshotService.takeScreenshot(url);
-            IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
-        }
-        catch (Exception e)
-        {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.GenericServlet#init()
+	 */
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		screenshotService = new HtmlScreenshotService();
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
+	 * , javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		try {
+			String url = req.getParameter("url");
+
+			Boolean fullSize = Boolean.parseBoolean(req
+					.getParameter("fullSize"));
+
+			if (fullSize == true) {
+				file = screenshotService.takeScreenshot(url, fullSize);
+			} else {
+				if (req.getParameter("browserWidth") != null
+						&& req.getParameter("browserHeight") != null) {
+					browserWidth = Integer.parseInt(req
+							.getParameter("browserWidth"));
+					browserHeight = Integer.parseInt(req
+							.getParameter("browserHeight"));
+					file = screenshotService.takeScreenshot(url, browserWidth,
+							browserHeight);
+				} else if (req.getParameter("browserWidth") != null
+						&& req.getParameter("browserHeight") == null) {
+					browserWidth = Integer.parseInt(req
+							.getParameter("browserWidth"));
+					file = screenshotService.takeScreenshot(url, browserWidth,
+							0);
+				} else if (req.getParameter("browserWidth") == null
+						&& req.getParameter("browserHeight") != null) {
+					browserHeight = Integer.parseInt(req
+							.getParameter("browserHeight"));
+					file = screenshotService.takeScreenshot(url, 0,
+							browserHeight);
+				} else {
+					file = screenshotService.takeScreenshot(url);
+				}
+
+			}
+
+			IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
+
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		try {
+			File html = File.createTempFile("htmlTemp", ".html");
+			IOUtils.copy(req.getInputStream(), new FileOutputStream(html));
+			file = screenshotService.takeScreenshot("file:///"
+					+ html.getAbsolutePath());
+			IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
+		} catch (Exception e) {
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+
+	}
 }

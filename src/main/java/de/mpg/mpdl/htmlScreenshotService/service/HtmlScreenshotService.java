@@ -52,9 +52,19 @@ public class HtmlScreenshotService
     {
         this.htmlScreenshot = new HtmlScreenshot();
     }
-
+    
     public File takeScreenshot(String url) throws MalformedURLException
     {
         return htmlScreenshot.takeScreenshot(URI.create(url).toURL());
+    }
+    
+    public File takeScreenshot(String url, int width, int height) throws MalformedURLException
+    {
+        return htmlScreenshot.takeScreenshot(URI.create(url).toURL(), width, height);
+    }
+    
+    public File takeScreenshot(String url, Boolean fullSize) throws MalformedURLException
+    {
+        return htmlScreenshot.takeScreenshot(URI.create(url).toURL(), fullSize);
     }
 }
