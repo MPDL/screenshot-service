@@ -14,3 +14,4 @@ target/
 hs_err_pid*
 .project
 .classpath
+src/main/java/rebel.xml
