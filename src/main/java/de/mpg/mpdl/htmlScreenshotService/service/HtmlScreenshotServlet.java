@@ -32,6 +32,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +41,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.MagicNumberFileFilter;
+
+import de.mpg.mpdl.api.magick.MagickFacade;
+import de.mpg.mpdl.api.magick.MagickFacade.Priority;
 
 /**
  * TODO Description
@@ -50,11 +56,13 @@ import org.apache.commons.io.IOUtils;
 public class HtmlScreenshotServlet extends HttpServlet {
 	private static final long serialVersionUID = -3073642728935619196L;
 	private HtmlScreenshotService screenshotService;
+	private MagickFacade magick;
 
 	private File file;
 	// private File resizeImageFile;
 	private int browserWidth;
 	private int browserHeight;
+	private boolean useFireFox;
 
 	/*
 	 * (non-Javadoc)
@@ -66,6 +74,45 @@ public class HtmlScreenshotServlet extends HttpServlet {
 		super.init();
 		screenshotService = new HtmlScreenshotService();
 
+	}
+
+	private String readBrowserParam(HttpServletRequest req, String param) {
+		if (req.getParameter(param) != null) {
+			return req.getParameter(param);
+		} else {
+			return "";
+		}
+
+	}
+
+	/**
+	 * Read a parameter from the request
+	 * 
+	 * @param req
+	 * @param name
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	private String readParam(HttpServletRequest req, String name)
+			throws UnsupportedEncodingException {
+		String value = req.getParameter(name);
+		if ("crop".equals(name) && value != null) {
+			String notEncodedvalue = repareCropParam(value);
+			if (!notEncodedvalue.equals(value))
+				return notEncodedvalue;
+		}
+		return value == null ? "" : URLDecoder.decode(value, "UTF-8");
+	}
+
+	/**
+	 * When the crop parameter is not encoded, the + are interpreted as a white
+	 * space in the url
+	 * 
+	 * @param crop
+	 * @return
+	 */
+	private String repareCropParam(String crop) {
+		return crop.trim().replace(" ", "+");
 	}
 
 	/*
@@ -80,38 +127,20 @@ public class HtmlScreenshotServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			String url = req.getParameter("url");
+			browserWidth = (readBrowserParam(req, "browserWidth") != "") ? Integer
+					.parseInt(req.getParameter("browserWidth")) : 1920;
+			browserHeight = (readBrowserParam(req, "browserHeight") != "") ? Integer
+					.parseInt(req.getParameter("browserHeight")) : 1080;
+			useFireFox = (readBrowserParam(req, "useFireFox") != "") ? Boolean
+					.parseBoolean(req.getParameter("useFireFox")) : false;
 
-			Boolean fullSize = Boolean.parseBoolean(req
-					.getParameter("fullSize"));
+			file = screenshotService.takeScreenshot(url, browserWidth,
+					browserHeight, useFireFox);
 
-			if (fullSize == true) {
-				file = screenshotService.takeScreenshot(url, fullSize);
-			} else {
-				if (req.getParameter("browserWidth") != null
-						&& req.getParameter("browserHeight") != null) {
-					browserWidth = Integer.parseInt(req
-							.getParameter("browserWidth"));
-					browserHeight = Integer.parseInt(req
-							.getParameter("browserHeight"));
-					file = screenshotService.takeScreenshot(url, browserWidth,
-							browserHeight);
-				} else if (req.getParameter("browserWidth") != null
-						&& req.getParameter("browserHeight") == null) {
-					browserWidth = Integer.parseInt(req
-							.getParameter("browserWidth"));
-					file = screenshotService.takeScreenshot(url, browserWidth,
-							0);
-				} else if (req.getParameter("browserWidth") == null
-						&& req.getParameter("browserHeight") != null) {
-					browserHeight = Integer.parseInt(req
-							.getParameter("browserHeight"));
-					file = screenshotService.takeScreenshot(url, 0,
-							browserHeight);
-				} else {
-					file = screenshotService.takeScreenshot(url);
-				}
-
-			}
+			file = magick.convert(file, readParam(req, "format"),
+					readParam(req, "size"), readParam(req, "crop"),
+					Priority.nonNullValueOf(readParam(req, "priority")),
+					readParam(req, "params1"), readParam(req, "params2"));
 
 			IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 
@@ -129,10 +158,17 @@ public class HtmlScreenshotServlet extends HttpServlet {
 			String path = "file:///" + html.getAbsolutePath();
 			System.out.println(path);
 			file = screenshotService.takeScreenshot(path);
+
+			file = magick.convert(file, readParam(req, "format"),
+					readParam(req, "size"), readParam(req, "crop"),
+					Priority.nonNullValueOf(readParam(req, "priority")),
+					readParam(req, "params1"), readParam(req, "params2"));
+
 			IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 
 	}
+
 }

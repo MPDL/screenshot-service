@@ -36,6 +36,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 
 /**
  * Make a Screenshot of an HTML Page
@@ -51,8 +53,8 @@ public class HtmlScreenshot {
 	 * Initialize the {@link HtmlScreenshot} with Firefox
 	 */
 	public HtmlScreenshot() {
-		driver = new FirefoxDriver();
-
+		System.out
+				.println(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY);
 	}
 
 	/**
@@ -63,24 +65,27 @@ public class HtmlScreenshot {
 	 */
 
 	public File takeScreenshot(String url) {
-		driver.get(url);
-		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		return takeScreenshot(url, 1920, 1080, false);
 	}
 
-	public File takeScreenshot(URL url, int width, int height) {
-		driver.get(url.toString());
-		driver.manage().window().setSize(new Dimension(width, height));
-
-		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-	}
-
-	public File takeScreenshot(URL url, Boolean fullSize) {
-		driver.get(url.toString());
-
-		if (fullSize == true) {
-			driver.manage().window().maximize();
+	public File takeScreenshot(String url, int width, int height,
+			boolean useFireFox) {
+		try {
+			driver = useFireFox ? new FirefoxDriver() : getPhantomJSDriver();
+			driver.get(url.toString());
+			driver.manage().window();
+			driver.manage().window().setSize(new Dimension(width, height));
+			return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		} finally {
+			driver.close();
 		}
+	}
 
-		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	private PhantomJSDriver getPhantomJSDriver() {
+		String pogramFilePath = System.getenv("ProgramFiles(X86)");
+		System.setProperty("phantomjs.binary.path", pogramFilePath
+				+ "\\phantomjs-1.9.7-windows\\phantomjs.exe");
+		System.getProperty("phantomjs.binary.path");
+		return new PhantomJSDriver();
 	}
 }

@@ -58,13 +58,12 @@ public class HtmlScreenshotService
         return htmlScreenshot.takeScreenshot(url);
     }
     
-    public File takeScreenshot(String url, int width, int height) throws MalformedURLException
+   
+    
+    public File takeScreenshot(String url, int width, int height, boolean useFireFox) throws MalformedURLException
     {
-        return htmlScreenshot.takeScreenshot(URI.create(url).toURL(), width, height);
+        return htmlScreenshot.takeScreenshot(url, width, height,useFireFox);
     }
     
-    public File takeScreenshot(String url, Boolean fullSize) throws MalformedURLException
-    {
-        return htmlScreenshot.takeScreenshot(URI.create(url).toURL(), fullSize);
-    }
+   
 }
