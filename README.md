@@ -29,8 +29,9 @@ how to call the service?
 the user can send the parameters to the service by using methods GET and POST <br />
 - **url** (Mandotory for `GET`): the url of the file to be transformed, e.g. http://localhost:8080/html-screenshot/?url=
 - **useFirefox**: the browser Firefox be selected to call the service, e.g. http://localhost:8080/html-screenshot/?url= & useFireFox=true
-- **browserWidth** and "browserHeight" to resize the browser width or height, e.g. http://localhost:8080/html-screenshot/?url= & useFireFox=true & width= & height=
-the html-screenshot-service use magick servie to tranform the image by using some parameters, they are:
+- **browserWidth** and "browserHeight" to resize the browser width or height, e.g. http://localhost:8080/html-screenshot/?url= & useFireFox=true & width= & height=<br />
+
+the html-screenshot-service use [magick service](https://github.com/MPDL/magick-service) to tranform the image by using some parameters, they are:
 - **size**: As defined by imagemagick [resize](http://www.imagemagick.org/script/command-line-options.php#resize)
 - **crop**:As defined by imagemagick [crop](http://www.imagemagick.org/script/command-line-options.php#crop)
 - **format**: The format in which the file shhould be returned (for instance png, jpg, etc.)
