@@ -17,14 +17,14 @@ how to run the service?
 -----------------------
 ### GET
 the user can send the parameter to the service by using method GET <br />
-GET: localhost:8080/html-screenshot/?url=
-If choose Firefox to run the service
-GET: localhost:8080/html-screenshot/?url= & useFireFox=true
-If resize the browser width or height
-GET: localhost:8080/html-screenshot/?url= & useFireFox=true & width= & height= 
+GET: localhost:8080/html-screenshot/?url= <br />
+If choose Firefox to run the service <br />
+GET: localhost:8080/html-screenshot/?url= & useFireFox=true <br />
+If resize the browser width or height <br />
+GET: localhost:8080/html-screenshot/?url= & useFireFox=true & width= & height=<br />
 ### POST
 the user can also send html file by using method POST <br />
-POST: file///the path of html file
+POST: file///the path of html file <br />
 
 
 
