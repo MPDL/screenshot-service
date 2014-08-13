@@ -134,14 +134,13 @@ public class HtmlScreenshotServlet extends HttpServlet {
 			file = screenshotService.takeScreenshot(url, browserWidth,
 					browserHeight, useFireFox);
 
-			imageTransformer.transform(new FileInputStream(file),
-					new FileOutputStream(file), url, "png",
-					readParam(req, "size"), readParam(req, "crop"),
-					readParam(req, "priority"), readParam(req, "params1"),
-					readParam(req, "params2"));
-
-			IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
-
+			if (transformScreenshot(req)) {
+				imageTransformer.transform(file, resp.getOutputStream(), "png",
+						readParam(req, "size"), readParam(req, "crop"),
+						readParam(req, "priority"), readParam(req, "params1"),
+						readParam(req, "params2"));
+			} else
+				IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
@@ -156,18 +155,33 @@ public class HtmlScreenshotServlet extends HttpServlet {
 			IOUtils.copy(req.getInputStream(), new FileOutputStream(html));
 			String path = "file:///" + html.getAbsolutePath();
 			file = screenshotService.takeScreenshot(path);
-
-			imageTransformer.transform(new FileInputStream(file),
-					new FileOutputStream(file), "screenshot.png", "png",
-					readParam(req, "size"), readParam(req, "crop"),
-					readParam(req, "priority"), readParam(req, "params1"),
-					readParam(req, "params2"));
-
-			IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
+			if (transformScreenshot(req)) {
+				imageTransformer.transform(file, resp.getOutputStream(), "png",
+						readParam(req, "size"), readParam(req, "crop"),
+						readParam(req, "priority"), readParam(req, "params1"),
+						readParam(req, "params2"));
+			} else
+				IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
+	}
 
+	/**
+	 * 
+	 * True if the screenshot must be transformed
+	 * 
+	 * @param req
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	private boolean transformScreenshot(HttpServletRequest req)
+			throws UnsupportedEncodingException {
+		return !readParam(req, "size").equals("")
+				|| !readParam(req, "crop").equals("")
+				|| !readParam(req, "priority").equals("")
+				|| !readParam(req, "params1").equals("")
+				|| !readParam(req, "params2").equals("");
 	}
 
 }

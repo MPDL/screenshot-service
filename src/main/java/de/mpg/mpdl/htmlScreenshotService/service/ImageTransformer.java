@@ -1,5 +1,8 @@
 package de.mpg.mpdl.htmlScreenshotService.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -56,21 +59,20 @@ public class ImageTransformer {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public void transform(InputStream in, OutputStream out, String name,
-			String format, String size, String crop, String priority,
-			String params1, String params2) throws MalformedURLException,
-			IOException {
+	public void transform(File f, OutputStream out, String format, String size,
+			String crop, String priority, String params1, String params2)
+			throws MalformedURLException, IOException {
 		// Initialize the connection to the magick service according to the
 		// parameters
 		URLConnection magickConn = URI
 				.create(magickServiceUrl
-						+ generateMagickParameters(name, format, size, crop,
-								priority, params1, params2)).toURL()
-				.openConnection();
+						+ generateMagickParameters("screenshot.png", format,
+								size, crop, priority, params1, params2))
+				.toURL().openConnection();
 		// Allow to write data in the connection (for POST request)
 		magickConn.setDoOutput(true);
 		// Send the request to the magick service
-		IOUtils.copy(in, magickConn.getOutputStream());
+		IOUtils.copy(new FileInputStream(f), magickConn.getOutputStream());
 		// Copy the response of the magick service to the output
 		IOUtils.copy(magickConn.getInputStream(), out);
 	}
