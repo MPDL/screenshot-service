@@ -154,7 +154,15 @@ public class HtmlScreenshotServlet extends HttpServlet {
 			File html = File.createTempFile("htmlTemp", ".html");
 			IOUtils.copy(req.getInputStream(), new FileOutputStream(html));
 			String path = "file:///" + html.getAbsolutePath();
-			file = screenshotService.takeScreenshot(path);
+			browserWidth = (readBrowserParam(req, "browserWidth") != "") ? Integer
+					.parseInt(req.getParameter("browserWidth")) : 1920;
+			browserHeight = (readBrowserParam(req, "browserHeight") != "") ? Integer
+					.parseInt(req.getParameter("browserHeight")) : 1080;
+			useFireFox = (readBrowserParam(req, "useFireFox") != "") ? Boolean
+					.parseBoolean(req.getParameter("useFireFox")) : false;
+
+			file = screenshotService.takeScreenshot(path, browserWidth,
+					browserHeight, useFireFox);
 			if (transformScreenshot(req)) {
 				imageTransformer.transform(file, resp.getOutputStream(), "png",
 						readParam(req, "size"), readParam(req, "crop"),
