@@ -41,10 +41,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.MagicNumberFileFilter;
-
-import de.mpg.mpdl.api.magick.MagickFacade;
-import de.mpg.mpdl.api.magick.MagickFacade.Priority;
 
 /**
  * TODO Description
@@ -56,13 +52,13 @@ import de.mpg.mpdl.api.magick.MagickFacade.Priority;
 public class HtmlScreenshotServlet extends HttpServlet {
 	private static final long serialVersionUID = -3073642728935619196L;
 	private HtmlScreenshotService screenshotService;
-	private MagickFacade magick;
 
 	private File file;
 	// private File resizeImageFile;
 	private int browserWidth;
 	private int browserHeight;
 	private boolean useFireFox;
+	private ImageTransformer imageTransformer;
 
 	/*
 	 * (non-Javadoc)
@@ -73,6 +69,7 @@ public class HtmlScreenshotServlet extends HttpServlet {
 	public void init() throws ServletException {
 		super.init();
 		screenshotService = new HtmlScreenshotService();
+		imageTransformer = new ImageTransformer();
 
 	}
 
@@ -137,15 +134,17 @@ public class HtmlScreenshotServlet extends HttpServlet {
 			file = screenshotService.takeScreenshot(url, browserWidth,
 					browserHeight, useFireFox);
 
-			file = magick.convert(file, readParam(req, "format"),
+			imageTransformer.transform(new FileInputStream(file),
+					new FileOutputStream(file), url, "png",
 					readParam(req, "size"), readParam(req, "crop"),
-					Priority.nonNullValueOf(readParam(req, "priority")),
-					readParam(req, "params1"), readParam(req, "params2"));
+					readParam(req, "priority"), readParam(req, "params1"),
+					readParam(req, "params2"));
 
 			IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
 		}
 	}
 
@@ -156,13 +155,13 @@ public class HtmlScreenshotServlet extends HttpServlet {
 			File html = File.createTempFile("htmlTemp", ".html");
 			IOUtils.copy(req.getInputStream(), new FileOutputStream(html));
 			String path = "file:///" + html.getAbsolutePath();
-			System.out.println(path);
 			file = screenshotService.takeScreenshot(path);
 
-			file = magick.convert(file, readParam(req, "format"),
+			imageTransformer.transform(new FileInputStream(file),
+					new FileOutputStream(file), "screenshot.png", "png",
 					readParam(req, "size"), readParam(req, "crop"),
-					Priority.nonNullValueOf(readParam(req, "priority")),
-					readParam(req, "params1"), readParam(req, "params2"));
+					readParam(req, "priority"), readParam(req, "params1"),
+					readParam(req, "params2"));
 
 			IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 		} catch (Exception e) {

@@ -27,8 +27,8 @@ public class ImageTransformer {
 	private static final String DEFAULT_NAME = "screenshot.png";
 
 	public ImageTransformer() {
-		// TODO read that property from a property file
-		magickServiceUrl = "http://localhost:8080/html-screenshot";
+		ServiceConfiguration config = new ServiceConfiguration();
+		magickServiceUrl = config.getMagickSErviceUrl();
 	}
 
 	/**
@@ -91,14 +91,13 @@ public class ImageTransformer {
 	private String generateMagickParameters(String name, String format,
 			String size, String crop, String priority, String params1,
 			String params2) throws UnsupportedEncodingException {
-		return URLEncoder.encode(
-				"?format=" + getNonNullValue(format, DEFAULT_FORMAT) + "&size="
-						+ getNonNullValue(size, DEFAULT_SIZE) + "&crop="
-						+ getNonNullValue(crop, DEFAULT_CROP) + "&priority="
-						+ getNonNullValue(priority, DEFAULT_PRIORITY)
-						+ "&name=" + getNonNullValue(name, DEFAULT_NAME)
-						+ "&params1=" + params1 + "&params2=" + params2,
-				"UTF-8");
+		return "?format=" + getNonNullValue(format, DEFAULT_FORMAT) + "&size="
+				+ getNonNullValue(size, DEFAULT_SIZE) + "&crop="
+				+ getNonNullValue(crop, DEFAULT_CROP) + "&priority="
+				+ getNonNullValue(priority, DEFAULT_PRIORITY) + "&name="
+				+ getNonNullValue(name, DEFAULT_NAME) + "&params1="
+				+ URLEncoder.encode(params1, "UTF-8") + "&params2="
+				+ URLEncoder.encode(params2, "UTF-8");
 	}
 
 	/**
@@ -107,8 +106,11 @@ public class ImageTransformer {
 	 * @param value
 	 * @param defaultValue
 	 * @return
+	 * @throws UnsupportedEncodingException
 	 */
-	private String getNonNullValue(String value, String defaultValue) {
-		return value != null ? value : defaultValue;
+	private String getNonNullValue(String value, String defaultValue)
+			throws UnsupportedEncodingException {
+		return value != null ? URLEncoder.encode(value, "UTF-8") : URLEncoder
+				.encode(defaultValue, "UTF-8");
 	}
 }

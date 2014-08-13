@@ -39,6 +39,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 
+import de.mpg.mpdl.htmlScreenshotService.service.ServiceConfiguration;
+
 /**
  * Make a Screenshot of an HTML Page
  * 
@@ -48,13 +50,13 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
  */
 public class HtmlScreenshot {
 	private WebDriver driver;
+	private ServiceConfiguration config;
 
 	/**
 	 * Initialize the {@link HtmlScreenshot} with Firefox
 	 */
 	public HtmlScreenshot() {
-		System.out
-				.println(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY);
+		config = new ServiceConfiguration();
 	}
 
 	/**
@@ -70,8 +72,8 @@ public class HtmlScreenshot {
 
 	public File takeScreenshot(String url, int width, int height,
 			boolean useFireFox) {
+		driver = useFireFox ? new FirefoxDriver() : getPhantomJSDriver();
 		try {
-			driver = useFireFox ? new FirefoxDriver() : getPhantomJSDriver();
 			driver.get(url.toString());
 			driver.manage().window();
 			driver.manage().window().setSize(new Dimension(width, height));
@@ -82,10 +84,7 @@ public class HtmlScreenshot {
 	}
 
 	private PhantomJSDriver getPhantomJSDriver() {
-		String pogramFilePath = System.getenv("ProgramFiles(X86)");
-		System.setProperty("phantomjs.binary.path", pogramFilePath
-				+ "\\phantomjs-1.9.7-windows\\phantomjs.exe");
-		System.getProperty("phantomjs.binary.path");
+		System.setProperty("phantomjs.binary.path", config.getPhantomJsBin());
 		return new PhantomJSDriver();
 	}
 }
