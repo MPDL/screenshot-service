@@ -3,9 +3,9 @@ html-screenshot-service
 
 what is html-screenshot-service?
 --------------------------------
-html-screenshot-service is a service to create a screenshot of the html page by using selenium driver.
+html-screenshot-service is a service to create a screenshot of the html page by using selenium web driver.
 The user can through the parameters to change the browser size and to tranform the scrennshot into the
-image that they needed.
+image.
 
 what needs to be install?
 ----------------------
