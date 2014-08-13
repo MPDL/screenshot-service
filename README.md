@@ -10,11 +10,11 @@ image that they needed.
 what needs to be install?
 ----------------------
 html-screenshot-servie can be run in Firefox or in background by using PhantomJS.<br />
-1. Install Firefox [download](https://www.mozilla.org/)
-2. Install Phantoms [download] (http://phantomjs.org/download.html) 
-3. Install Java [download] (http://www.oracle.com/technetwork/java/javase/downloads/index.html) 
-4. Install Maven [download] (http://maven.apache.org/download.cgi) 
-5. Install Tomcat [download](http://maven.apache.org/download.cgi)
+1. Install Firefox [download](https://www.mozilla.org/)<br />
+2. Install Phantoms [download] (http://phantomjs.org/download.html) <br />
+3. Install Java [download] (http://www.oracle.com/technetwork/java/javase/downloads/index.html)<br /> 
+4. Install Maven [download] (http://maven.apache.org/download.cgi) <br />
+5. Install Tomcat [download](http://maven.apache.org/download.cgi)<br />
 
 how to install the service?
 --------------------------
