@@ -10,9 +10,8 @@ image that they needed.
 what needs to install?
 ----------------------
 html-screenshot-servie can be run in Firefox or in background by using PhantomJS.
-### Firefox
-[Firefox Download](https://www.mozilla.org/)
-[PhantomJS Download] (http://phantomjs.org/download.html)
+[Firefox Download](https://www.mozilla.org/)<br />
+[PhantomJS Download] (http://phantomjs.org/download.html) <br />
 
 
 
