@@ -164,6 +164,7 @@ public class HtmlScreenshotServlet extends HttpServlet {
 					.parseBoolean(req.getParameter("useFireFox")) : false;
 
 			String path = "file:///" + html.getAbsolutePath();
+
 			file = screenshotService.takeScreenshot(path, browserWidth,
 					browserHeight, useFireFox);
 			if (transformScreenshot(req)) {
