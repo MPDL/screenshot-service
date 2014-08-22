@@ -33,7 +33,7 @@ public class ServiceConfiguration {
 	public String getPhantomJsBin() {
 		if (properties.containsKey("phantomjs.bin"))
 			return (String) properties.get("phantomjs.bin");
-		return null;
+		return "phantomjs";
 	}
 	
 	/**

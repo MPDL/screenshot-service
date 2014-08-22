@@ -22,8 +22,8 @@
  */
 /*
  * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
- * für wissenschaftlich-technische Information mbH and Max-Planck-
- * Gesellschaft zur Förderung der Wissenschaft e.V.
+ * f��r wissenschaftlich-technische Information mbH and Max-Planck-
+ * Gesellschaft zur F��rderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
 package de.mpg.mpdl.htmlScreenshotService.service;
@@ -124,23 +124,28 @@ public class HtmlScreenshotServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			String url = req.getParameter("url");
-			browserWidth = (readBrowserParam(req, "browserWidth") != "") ? Integer
-					.parseInt(req.getParameter("browserWidth")) : 1920;
-			browserHeight = (readBrowserParam(req, "browserHeight") != "") ? Integer
-					.parseInt(req.getParameter("browserHeight")) : 1080;
-			useFireFox = (readBrowserParam(req, "useFireFox") != "") ? Boolean
-					.parseBoolean(req.getParameter("useFireFox")) : false;
 
-			file = screenshotService.takeScreenshot(url, browserWidth,
-					browserHeight, useFireFox);
+			if (url != null) {
+				browserWidth = (readBrowserParam(req, "browserWidth") != "") ? Integer
+						.parseInt(req.getParameter("browserWidth")) : 1920;
+				browserHeight = (readBrowserParam(req, "browserHeight") != "") ? Integer
+						.parseInt(req.getParameter("browserHeight")) : 1080;
+				useFireFox = (readBrowserParam(req, "useFireFox") != "") ? Boolean
+						.parseBoolean(req.getParameter("useFireFox")) : false;
 
-			if (transformScreenshot(req)) {
-				imageTransformer.transform(file, resp.getOutputStream(), "png",
-						readParam(req, "size"), readParam(req, "crop"),
-						readParam(req, "priority"), readParam(req, "params1"),
-						readParam(req, "params2"));
-			} else
-				IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
+				file = screenshotService.takeScreenshot(url, browserWidth,
+						browserHeight, useFireFox);
+
+				if (transformScreenshot(req)) {
+					imageTransformer.transform(file, resp.getOutputStream(),
+							"png", readParam(req, "size"),
+							readParam(req, "crop"), readParam(req, "priority"),
+							readParam(req, "params1"),
+							readParam(req, "params2"));
+				} else
+					IOUtils.copy(new FileInputStream(file),
+							resp.getOutputStream());
+			}
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
@@ -151,10 +156,13 @@ public class HtmlScreenshotServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
-
 			File html = File.createTempFile("htmlScreenshot", ".html");
-			IOUtils.copy(req.getInputStream(), new FileOutputStream(html));
-
+			if (req.getParameter("html") != null) {
+				IOUtils.write(req.getParameter("html").getBytes(),
+						new FileOutputStream(html));
+			} else {
+				IOUtils.copy(req.getInputStream(), new FileOutputStream(html));
+			}
 			// TO Do After the copy the of the files
 			browserWidth = (readBrowserParam(req, "browserWidth") != "") ? Integer
 					.parseInt(req.getParameter("browserWidth")) : 1920;
@@ -176,6 +184,7 @@ public class HtmlScreenshotServlet extends HttpServlet {
 				IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
 		}
 	}
 

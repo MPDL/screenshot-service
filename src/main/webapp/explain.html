@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Do Screenshots of HTML Pages</title>
+	</head>
+<body>
+	<h1>Put page url</h1>
+	
+	<form action="/html-screenshot/api" method="get">
+		<p>
+			<input name="url" id="url" type="text" size="40" />
+		</p>
+		<p>
+			Resolution <input type="text" name="browserWidth" value="" size="5">(width) x <input type="text" name="browserHeight" value="" size="5">(height)
+		</p>
+		<p>
+			Output format: <input type="text" name="format" value="" size="5">
+		</p>
+		<p>
+			Output size: <input type="text" name="size" value="" size="5">
+		</p>
+		<p>
+			Crop image: <input type="text" name="crop" value="" size="5">
+		</p>
+		<input type="submit" value="Go" /> <input type="reset" value="Reset">
+	</form>
+	<h1>Paste HTML</h1>
+
+	<form action="/html-screenshot/api" method="post">
+		<p>
+        	<textarea name="html" cols="60" rows="15" maxlength="10240000"></textarea>
+   		</p>
+		<p>
+			Resolution <input type="text" name="browserWidth" value="" size="5">(width) <input type="text" name="browserHeight" value="" size="5">(height)
+		</p>
+		<p>
+			Output format: <input type="text" name="format" value="" size="5">
+		</p>
+		<p>
+			Resize image: <input type="text" name="size" value="" size="5">
+		</p>
+		<p>
+			Crop image: <input type="text" name="crop" value="" size="5">
+		</p>
+
+		<input type="submit" value="Go" /> <input type="reset" value="Reset">
+	</form>
+	<p>
+		See <a
+			href="https://github.com/MPDL/html-screenshot-service">
+			the documentation </a> for usage details.
+	</p>
+
+</body>
+</html>

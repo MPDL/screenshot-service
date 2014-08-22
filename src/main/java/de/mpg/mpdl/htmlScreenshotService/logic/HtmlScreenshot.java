@@ -74,7 +74,7 @@ public class HtmlScreenshot {
 			boolean useFireFox) {
 		driver = useFireFox ? new FirefoxDriver() : getPhantomJSDriver();
 		try {
-			driver.get(url.toString());
+			driver.get(url);
 			driver.manage().window();
 			driver.manage().window().setSize(new Dimension(width, height));
 			return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
