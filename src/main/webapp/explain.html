@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Do Screenshots of HTML Pages</title>
+		<title>Screenshot service</title>
 	</head>
 <body>
 	<h1>Put page url</h1>
 	
-	<form action="/html-screenshot/api" method="get">
+	<form action="/screenshot/take" method="get">
 		<p>
 			<input name="url" id="url" type="text" size="40" />
 		</p>
@@ -27,7 +27,7 @@
 	</form>
 	<h1>Paste HTML</h1>
 
-	<form action="/html-screenshot/api" method="post">
+	<form action="/screenshot/take" method="post">
 		<p>
         	<textarea name="html" cols="60" rows="15" maxlength="10240000"></textarea>
    		</p>

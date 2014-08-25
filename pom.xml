@@ -4,8 +4,8 @@
 	<groupId>de.mpg.mpdl</groupId>
 	<packaging>war</packaging>
 	<version>0.1-SNAPSHOT</version>
-	<name>html-screenshot-service</name>
-	<url>http://api.mpdl.mpg.de/html-screenshot</url>
+	<name>screenshot-service</name>
+	<url>http://api.mpdl.mpg.de/screenshot</url>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -33,10 +33,10 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>html-screenshot</finalName>
+		<finalName>screenshot</finalName>
 	</build>
-	<artifactId>html-screenshot-service</artifactId>
+	<artifactId>screenshot-service</artifactId>
 	<scm>
-		<url>https://github.com/MPDL/html-screenshot-service</url>
+		<url>https://github.com/MPDL/screenshot-service</url>
 	</scm>
 </project>
