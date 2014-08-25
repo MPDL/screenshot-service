@@ -18,7 +18,7 @@ The Screenshot Service can be run in Firefox or in background by using PhantomJS
 
 how to install the service?
 --------------------------
-1. Clone the service:https://github.com/MPDL/screenshot-service
+1. Clone the service: https://github.com/MPDL/screenshot-service
 2. Compile the service: In service directory, run `mvn clean install`
 3. Copy html-screenshot.war to Tomcat Webapp Directory
 4. Start Tomcat
@@ -27,11 +27,11 @@ how to install the service?
 how to call the service?
 -----------------------
 the user can send the parameters to the service by using methods `GET` and `POST` <br />
-- **url** (Mandotory for `GET`): the url of the file to be transformed, e.g. `http://localhost:8080/screenshot/?url=`
-- **useFirefox**: the browser Firefox be selected to call the service, e.g. `http://localhost:8080/screenshot/?url= & useFireFox=true`
-- **browserWidth** and **browserHeight** to resize the browser width or height, e.g. `http://localhost:8080/screenshot/?url= & useFireFox=true & browserWidth= & browserHeight=`<br />
+- **url** (Mandotory for `GET`): the url of the file to be transformed, e.g. `http://localhost:8080/screenshot/take?url=`
+- **useFirefox**: the browser Firefox be selected to call the service, e.g. `http://localhost:8080/screenshot/take?url= & useFireFox=true`
+- **browserWidth** and **browserHeight** to resize the browser width or height, e.g. `http://localhost:8080/screenshot/take?url= & useFireFox=true & browserWidth= & browserHeight=`<br />
 
-the html-screenshot-service use [magick service](https://github.com/MPDL/media-conversion-service) to tranform the image by using some parameters, they are:
+The Screenshot Service use [Media Conversion service](https://github.com/MPDL/media-conversion-service) to tranform the image by using some parameters, they are:
 - **size**: As defined by imagemagick [resize](http://www.imagemagick.org/script/command-line-options.php#resize)
 - **crop**:As defined by imagemagick [crop](http://www.imagemagick.org/script/command-line-options.php#crop)
 - **format**: The format in which the file should be returned (for instance png, jpg, etc.)
