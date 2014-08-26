@@ -138,7 +138,7 @@ public class HtmlScreenshotServlet extends HttpServlet {
 
 				if (transformScreenshot(req)) {
 					imageTransformer.transform(file, resp.getOutputStream(),
-							"png", readParam(req, "size"),
+							readParam(req, "format"), readParam(req, "size"),
 							readParam(req, "crop"), readParam(req, "priority"),
 							readParam(req, "params1"),
 							readParam(req, "params2"));
@@ -176,10 +176,10 @@ public class HtmlScreenshotServlet extends HttpServlet {
 			file = screenshotService.takeScreenshot(path, browserWidth,
 					browserHeight, useFireFox);
 			if (transformScreenshot(req)) {
-				imageTransformer.transform(file, resp.getOutputStream(), "png",
-						readParam(req, "size"), readParam(req, "crop"),
-						readParam(req, "priority"), readParam(req, "params1"),
-						readParam(req, "params2"));
+				imageTransformer.transform(file, resp.getOutputStream(),
+						readParam(req, "format"), readParam(req, "size"),
+						readParam(req, "crop"), readParam(req, "priority"),
+						readParam(req, "params1"), readParam(req, "params2"));
 			} else
 				IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 		} catch (Exception e) {
@@ -198,7 +198,8 @@ public class HtmlScreenshotServlet extends HttpServlet {
 	 */
 	private boolean transformScreenshot(HttpServletRequest req)
 			throws UnsupportedEncodingException {
-		return !readParam(req, "size").equals("")
+		return !readParam(req, "format").equals("")
+				|| !readParam(req, "size").equals("")
 				|| !readParam(req, "crop").equals("")
 				|| !readParam(req, "priority").equals("")
 				|| !readParam(req, "params1").equals("")

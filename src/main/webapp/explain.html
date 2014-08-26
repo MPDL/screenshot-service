@@ -12,16 +12,24 @@
 			<input name="url" id="url" type="text" size="40" />
 		</p>
 		<p>
-			Resolution <input type="text" name="browserWidth" value="" size="5">(width)  <input type="text" name="browserHeight" value="" size="5">(height)
+			Set Browser resolution <input type="text" name="browserWidth" value="" size="5"> width in px,  <input type="text" name="browserHeight" value="" size="5"> height in px
 		</p>
 		<p>
-			Output format: <input type="text" name="format" value="" size="5">
+			Choose output format 
+			<select name="format">
+				<option value="png" selected="selected">png</option>
+				<option value="jpg">jpg</option>
+				<option value="gif">gif</option>
+				<option value="tiff">tiff</option>
+				<option value="svg">svg</option>
+				<option value="bmp">bmp</option>
+			</select>
 		</p>
 		<p>
-			Output size: <input type="text" name="size" value="" size="5">
+			Set output size (in px) <input type="text" name="size" value="" size="5">
 		</p>
 		<p>
-			Crop image: <input type="text" name="crop" value="" size="5">
+			Crop output <input type="text" name="crop" value="" size="10">  Defines WIDTH x HEIGHT (in px) and the coordinates (X,Y), for instance: 500x400+50+35
 		</p>
 		<input type="submit" value="Go" /> <input type="reset" value="Reset">
 	</form>
@@ -32,18 +40,25 @@
         	<textarea name="html" cols="60" rows="15" maxlength="10240000"></textarea>
    		</p>
 		<p>
-			Resolution <input type="text" name="browserWidth" value="" size="5">(width) <input type="text" name="browserHeight" value="" size="5">(height)
+			Set Browser resolution <input type="text" name="browserWidth" value="" size="5"> width in px,  <input type="text" name="browserHeight" value="" size="5"> height in px
 		</p>
 		<p>
-			Output format: <input type="text" name="format" value="" size="5">
+			Choose output format 
+			<select name="format">
+				<option value="png" selected="selected">png</option>
+				<option value="jpg">jpg</option>
+				<option value="gif">gif</option>
+				<option value="tiff">tiff</option>
+				<option value="svg">svg</option>
+				<option value="bmp">bmp</option>
+			</select>
 		</p>
 		<p>
-			Resize image: <input type="text" name="size" value="" size="5">
+			Set output size (in px) <input type="text" name="size" value="" size="5">
 		</p>
 		<p>
-			Crop image: <input type="text" name="crop" value="" size="5">
+			Crop output <input type="text" name="crop" value="" size="10">  Defines WIDTH x HEIGHT (in px) and the coordinates (X,Y), for instance: 500x400+50+35
 		</p>
-
 		<input type="submit" value="Go" /> <input type="reset" value="Reset">
 	</form>
 	<p>
@@ -51,6 +66,5 @@
 			href="https://github.com/MPDL/html-screenshot-service">
 			the documentation </a> for usage details.
 	</p>
-
 </body>
 </html>
