@@ -28,6 +28,7 @@ how to call the service?
 -----------------------
 the user can send the parameters to the service by using methods `GET` and `POST` <br />
 - **url** (Mandotory for `GET`): the url of the file to be transformed, e.g. `http://localhost:8080/screenshot/take?url=`
+- **html** (Only for `POST`): the HTML to be transformed
 - **useFirefox**: the browser Firefox be selected to call the service, e.g. `http://localhost:8080/screenshot/take?url= & useFireFox=true`
 - **browserWidth** and **browserHeight** to resize the browser width or height, e.g. `http://localhost:8080/screenshot/take?url= & useFireFox=true & browserWidth= & browserHeight=`<br />
 
