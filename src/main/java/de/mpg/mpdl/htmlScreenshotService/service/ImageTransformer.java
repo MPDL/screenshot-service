@@ -69,8 +69,6 @@ public class ImageTransformer {
 						+ generateMagickParameters("screenshot.png", format,
 								size, crop, priority, params1, params2))
 				.toURL().openConnection();
-		System.out.println(format);
-		System.out.println(magickConn.getURL().toString());
 		// Allow to write data in the connection (for POST request)
 		magickConn.setDoOutput(true);
 		// Send the request to the magick service
