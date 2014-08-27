@@ -7,7 +7,7 @@
 	<display-name>Screenshot Service</display-name>
 	<servlet>
 		<servlet-name>Service Servlet</servlet-name>
-		<servlet-class>de.mpg.mpdl.htmlScreenshotService.service.HtmlScreenshotServlet</servlet-class>
+		<servlet-class>de.mpg.mpdl.service.rest.screenshot.service.HtmlScreenshotServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 		<async-supported>true</async-supported>
 	</servlet>
