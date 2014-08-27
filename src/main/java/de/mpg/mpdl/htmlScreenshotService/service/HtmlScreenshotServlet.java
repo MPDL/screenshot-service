@@ -34,12 +34,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -156,36 +161,60 @@ public class HtmlScreenshotServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {
-			File html = File.createTempFile("htmlScreenshot", ".html");
-			if (req.getParameter("html") != null) {
-				IOUtils.write(req.getParameter("html").getBytes(),
-						new FileOutputStream(html));
+			if (ServletFileUpload.isMultipartContent(req)) {
+				file = screenshotService.takeScreenshot(getUploadedFiles(req));
 			} else {
-				IOUtils.copy(req.getInputStream(), new FileOutputStream(html));
+				File html = File.createTempFile("htmlScreenshot", ".html");
+				if (req.getParameter("html") != null) {
+					IOUtils.write(req.getParameter("html").getBytes(),
+							new FileOutputStream(html));
+				} else {
+					IOUtils.copy(req.getInputStream(), new FileOutputStream(
+							html));
+				}
+				// TO Do After the copy the of the files
+				browserWidth = (readBrowserParam(req, "browserWidth") != "") ? Integer
+						.parseInt(req.getParameter("browserWidth"))
+						: HtmlScreenshotService.DEFAULT_WIDTH;
+				browserHeight = (readBrowserParam(req, "browserHeight") != "") ? Integer
+						.parseInt(req.getParameter("browserHeight"))
+						: HtmlScreenshotService.DEFAULT_HEIGHT;
+				useFireFox = (readBrowserParam(req, "useFireFox") != "") ? Boolean
+						.parseBoolean(req.getParameter("useFireFox")) : false;
+
+				file = screenshotService.takeScreenshot(html, browserWidth,
+						browserHeight, useFireFox);
+				if (transformScreenshot(req)) {
+					imageTransformer.transform(file, resp.getOutputStream(),
+							readParam(req, "format"), readParam(req, "size"),
+							readParam(req, "crop"), readParam(req, "priority"),
+							readParam(req, "params1"),
+							readParam(req, "params2"));
+				} else
+					IOUtils.copy(new FileInputStream(file),
+							resp.getOutputStream());
 			}
-			// TO Do After the copy the of the files
-			browserWidth = (readBrowserParam(req, "browserWidth") != "") ? Integer
-					.parseInt(req.getParameter("browserWidth")) : 1920;
-			browserHeight = (readBrowserParam(req, "browserHeight") != "") ? Integer
-					.parseInt(req.getParameter("browserHeight")) : 1080;
-			useFireFox = (readBrowserParam(req, "useFireFox") != "") ? Boolean
-					.parseBoolean(req.getParameter("useFireFox")) : false;
-
-			String path = "file:///" + html.getAbsolutePath();
-
-			file = screenshotService.takeScreenshot(path, browserWidth,
-					browserHeight, useFireFox);
-			if (transformScreenshot(req)) {
-				imageTransformer.transform(file, resp.getOutputStream(),
-						readParam(req, "format"), readParam(req, "size"),
-						readParam(req, "crop"), readParam(req, "priority"),
-						readParam(req, "params1"), readParam(req, "params2"));
-			} else
-				IOUtils.copy(new FileInputStream(file), resp.getOutputStream());
 		} catch (Exception e) {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Read Multipart files from {@link HttpServletRequest}
+	 * 
+	 * @param req
+	 * @return
+	 * @throws IOException
+	 * @throws FileUploadException
+	 */
+	private List<FileItem> getUploadedFiles(HttpServletRequest req)
+			throws IOException, FileUploadException {
+		File repository = File.createTempFile("servlet", null).getParentFile();
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		factory.setRepository(repository);
+		ServletFileUpload fileUpload = new ServletFileUpload(factory);
+		return fileUpload.parseRequest(req);
 	}
 
 	/**
