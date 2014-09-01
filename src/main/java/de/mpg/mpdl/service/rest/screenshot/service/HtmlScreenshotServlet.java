@@ -172,6 +172,7 @@ public class HtmlScreenshotServlet extends HttpServlet {
 					IOUtils.copy(req.getInputStream(), new FileOutputStream(
 							html));
 				}
+				System.out.println(html.getAbsolutePath());
 				// TO Do After the copy the of the files
 				browserWidth = (readBrowserParam(req, "browserWidth") != "") ? Integer
 						.parseInt(req.getParameter("browserWidth"))
