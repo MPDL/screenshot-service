@@ -23,6 +23,10 @@ how to install the service?
 3. Copy html-screenshot.war to Tomcat Webapp Directory
 4. Start Tomcat
 5. Run Services under `http://localhost:8080/screenshot`
+6. (OPTIONAL) If you want to support Webgl (only with useFirefox=true), you need:
+      * a: a server with a grafic card
+      * b: run `Xvfb :2 -screen 0 1024x768x24`
+      * c: run  `export DISPLAY=":2"`
 
 how to call the service?
 -----------------------
